@@ -1,0 +1,157 @@
+<div class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Gestion de la relation client</p>
+      <h1>Tableau de bord</h1>
+      <p class="subtitle">Suivez vos clients, utilisateurs et rôles en un seul endroit.</p>
+    </div>
+    <div class="header-actions">
+      <button class="secondary" type="button" (click)="resetClientForm()">Nouveau client</button>
+      <button class="secondary" type="button" (click)="resetUserForm()">Nouvel utilisateur</button>
+      <button class="secondary" type="button" (click)="resetRoleForm()">Nouveau rôle</button>
+    </div>
+  </header>
+
+  <section class="grid">
+    <div class="panel">
+      <h2>{{ selectedClient ? 'Modifier un client' : 'Ajouter un client' }}</h2>
+      <form (ngSubmit)="saveClient()" #clientFormRef="ngForm">
+        <label>
+          Nom complet
+          <input type="text" name="name" [(ngModel)]="clientForm.name" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" [(ngModel)]="clientForm.email" required />
+        </label>
+        <label>
+          Téléphone
+          <input type="text" name="phone" [(ngModel)]="clientForm.phone" required />
+        </label>
+        <label>
+          Société
+          <input type="text" name="company" [(ngModel)]="clientForm.company" required />
+        </label>
+
+        <div class="actions">
+          <button type="submit" [disabled]="clientFormRef.invalid">
+            {{ selectedClient ? 'Mettre à jour' : 'Créer' }}
+          </button>
+          <button class="secondary" type="button" (click)="resetClientForm()">Réinitialiser</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Base clients</h2>
+      <div class="list" *ngIf="clients.length; else emptyClients">
+        <article class="card" *ngFor="let client of clients">
+          <div>
+            <h3>{{ client.name }}</h3>
+            <p>{{ client.company }}</p>
+            <p>{{ client.email }}</p>
+            <p>{{ client.phone }}</p>
+          </div>
+          <div class="card-actions">
+            <button class="secondary" type="button" (click)="editClient(client)">Éditer</button>
+            <button class="danger" type="button" (click)="removeClient(client)">Supprimer</button>
+          </div>
+        </article>
+      </div>
+      <ng-template #emptyClients>
+        <p class="empty">Ajoutez votre premier client pour commencer.</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <section class="grid section">
+    <div class="panel">
+      <h2>{{ selectedUser ? 'Modifier un utilisateur' : 'Ajouter un utilisateur' }}</h2>
+      <form (ngSubmit)="saveUser()" #userFormRef="ngForm">
+        <label>
+          Nom complet
+          <input type="text" name="fullName" [(ngModel)]="userForm.fullName" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="userEmail" [(ngModel)]="userForm.email" required />
+        </label>
+        <label>
+          Rôle associé
+          <select name="roleId" [(ngModel)]="userForm.roleId" required>
+            <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+          </select>
+        </label>
+
+        <div class="actions">
+          <button type="submit" [disabled]="userFormRef.invalid">
+            {{ selectedUser ? 'Mettre à jour' : 'Créer' }}
+          </button>
+          <button class="secondary" type="button" (click)="resetUserForm()">Réinitialiser</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Utilisateurs</h2>
+      <div class="list" *ngIf="users.length; else emptyUsers">
+        <article class="card" *ngFor="let user of users">
+          <div>
+            <h3>{{ user.fullName }}</h3>
+            <p>{{ user.email }}</p>
+            <p class="pill">{{ user.roleName }}</p>
+          </div>
+          <div class="card-actions">
+            <button class="secondary" type="button" (click)="editUser(user)">Éditer</button>
+            <button class="danger" type="button" (click)="removeUser(user)">Supprimer</button>
+          </div>
+        </article>
+      </div>
+      <ng-template #emptyUsers>
+        <p class="empty">Aucun utilisateur enregistré pour le moment.</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <section class="grid section">
+    <div class="panel">
+      <h2>{{ selectedRole ? 'Modifier un rôle' : 'Ajouter un rôle' }}</h2>
+      <form (ngSubmit)="saveRole()" #roleFormRef="ngForm">
+        <label>
+          Nom du rôle
+          <input type="text" name="roleName" [(ngModel)]="roleForm.name" required />
+        </label>
+        <label>
+          Description
+          <textarea name="roleDescription" [(ngModel)]="roleForm.description" required></textarea>
+        </label>
+
+        <div class="actions">
+          <button type="submit" [disabled]="roleFormRef.invalid">
+            {{ selectedRole ? 'Mettre à jour' : 'Créer' }}
+          </button>
+          <button class="secondary" type="button" (click)="resetRoleForm()">Réinitialiser</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Rôles</h2>
+      <div class="list" *ngIf="roles.length; else emptyRoles">
+        <article class="card" *ngFor="let role of roles">
+          <div>
+            <h3>{{ role.name }}</h3>
+            <p>{{ role.description }}</p>
+          </div>
+          <div class="card-actions">
+            <button class="secondary" type="button" (click)="editRole(role)">Éditer</button>
+            <button class="danger" type="button" (click)="removeRole(role)">Supprimer</button>
+          </div>
+        </article>
+      </div>
+      <ng-template #emptyRoles>
+        <p class="empty">Ajoutez un rôle pour organiser les accès.</p>
+      </ng-template>
+    </div>
+  </section>
+</div>
